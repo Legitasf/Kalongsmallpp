@@ -25,48 +25,72 @@
             scroll-behavior: smooth;
         }
 
+        /* 啟動頁面/信封樣式 */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        #intro-overlay.hidden {
+            transform: translateY(-100%);
+        }
+
+        .envelope-content {
+            text-align: center;
+            animation: fadeInOut 2.5s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.4; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+        }
+
+        /* 初始隱藏主體內容，待點擊後顯示 */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
         section {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 6rem 1.5rem;
+            padding: 4rem 1rem;
             position: relative;
         }
 
-        /* 第一頁合併樣式 */
-        .page-header-merged {
-            background-color: #ffffff;
-        }
-
-        /* 縮小後的等比例倒金字塔佈局 */
-        .pyramid-banner {
+        /* 橫向並排橫幅佈局 */
+        .header-banner-row {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 5rem;
-            align-items: center;
-        }
-
-        .pyramid-top {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            width: 80%; /* 控制寬度以縮小尺寸 */
-        }
-
-        .pyramid-bottom {
-            width: 40%; /* 第三張圖片的寬度，使其與上方圖片大小一致 */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 4rem;
+            max-width: 900px;
         }
 
         .banner-img-frame {
             background-color: #f8f9fa;
-            aspect-ratio: 4 / 3; /* 統一比例 */
+            aspect-ratio: 1 / 1;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
         .banner-img-frame img {
@@ -78,8 +102,8 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .reveal.active {
@@ -88,23 +112,23 @@
         }
 
         .content-wrapper {
-            max-width: 850px; 
+            max-width: 800px; 
             width: 100%;
         }
 
         .chinese-text {
-            line-height: 2.4; 
+            line-height: 2.2; 
             text-align: justify;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #2d3436;
             white-space: pre-line;
+            padding: 0 0.5rem;
         }
 
-        /* 圖片垂直排列佈局 */
         .image-list-vertical {
             display: flex;
             flex-direction: column;
-            gap: 5rem;
+            gap: 3rem;
             width: 100%;
         }
 
@@ -114,147 +138,174 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 4px;
         }
 
         .image-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-            transition: opacity 0.5s ease;
         }
 
-        /* 導航點 */
         .page-nav {
             position: fixed;
-            right: 2rem;
+            right: 1.5rem;
             top: 50%;
             transform: translateY(-50%);
             z-index: 100;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.2rem;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .page-nav.visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+            .page-nav { right: 0.8rem; }
+            .chinese-text { font-size: 1rem; line-height: 2; }
+            h2 { font-size: 1.5rem; margin-bottom: 2rem !important; }
+            .header-banner-row { gap: 0.4rem; margin-bottom: 3rem; }
         }
 
         .nav-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #e0e0e0;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .nav-dot.active {
             background: #1a1a1a;
-            transform: scale(1.8);
+            transform: scale(1.5);
         }
 
-        h2 {
-            letter-spacing: 0.2em;
-        }
+        h2 { letter-spacing: 0.2em; }
     </style>
 </head>
-<body>
+<body class="bg-white">
 
-    <div class="page-nav" id="pageNav">
-        <div class="nav-dot active" onclick="scrollToSection('page1')"></div>
-        <div class="nav-dot" onclick="scrollToSection('page2')"></div>
-        <div class="nav-dot" onclick="scrollToSection('page3')"></div>
-        <div class="nav-dot" onclick="scrollToSection('page4')"></div>
+    <!-- 入口信封頁面 -->
+    <div id="intro-overlay" onclick="revealWebsite()">
+        <div class="envelope-content">
+            <p class="text-gray-400 tracking-[0.5em] text-sm mb-4">TO.</p>
+            <div class="w-px h-12 bg-gray-200 mx-auto mb-6"></div>
+            <p class="text-xl font-light tracking-widest text-gray-800">click</p>
+        </div>
     </div>
 
-    <section id="page1" class="page-header-merged">
-        <div class="content-wrapper reveal">
-            <!-- 統一尺寸的倒金字塔橫幅 -->
-            <div class="pyramid-banner">
-                <div class="pyramid-top">
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/d/1qXgXWF3EBqRSJwHYm1dppG3XxPRUgG9T" alt="Header 1">
-                    </div>
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/d/1ry8yxwOahuDAAHNQxYeumpZiGXaFpFcS" alt="Header 2">
-                    </div>
-                </div>
-                <div class="pyramid-bottom">
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/d/1sKM4kYgE7HdRObngN0EutZF600M1rcoS" alt="Header 3">
-                    </div>
-                </div>
-            </div>
+    <div id="main-content">
+        <div class="page-nav" id="pageNav">
+            <div class="nav-dot active" onclick="scrollToSection('page1')"></div>
+            <div class="nav-dot" onclick="scrollToSection('page2')"></div>
+            <div class="nav-dot" onclick="scrollToSection('page3')"></div>
+            <div class="nav-dot" onclick="scrollToSection('page4')"></div>
+        </div>
 
-            <h2 class="text-3xl mb-12 font-light">持續感性</h2>
-            <div class="chinese-text">
+        <section id="page1">
+            <div class="content-wrapper reveal">
+                <div class="header-banner-row">
+                    <div class="banner-img-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1M8uNrvW1_iay-k4VCX7hheP1MTJSiCEj" alt="Header 1">
+                    </div>
+                    <div class="banner-img-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1ry8yxwOahuDAAHNQxYeumpZiGXaFpFcS" alt="Header 2">
+                    </div>
+                    <div class="banner-img-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1sKM4kYgE7HdRObngN0EutZF600M1rcoS" alt="Header 3">
+                    </div>
+                </div>
+
+                <h2 class="text-3xl mb-12 font-light">1</h2>
+                <div class="chinese-text">
 話說Christmas party 個陣就有好多嘢想講既， 但係由於講都未講已經就嚟喊，所以都係依度先講了，講嘅嘢係有啲肉麻的，唔鍾意的話就唔好睇了。
 
 首先好想多謝你地，好多謝班上面既每一個人，多謝既唔單只係為MF 呢段時間既付出，更加係為左呢三年陪伴。
 
-除左係一個感性的人，我其實都係一個幾容易緊張既人。F4 到F6 MF 前一段時間我幾乎每晚都瞓唔著覺，係真係feel到個心臟physically 跳緊咁緊張。我好驚會唱唔好，好驚會唔記得、做錯動作，上兩年好驚螢光棒會揮錯，今年就因為離個吊麥10cm特別驚唱歌走音，甚至連正式上台前最後一次練都係著唔到條裙。我好驚會辜負大家既努力，好驚最後一年MF冇得同大家一齊開開心心咁結束。呢兩年每當我緊張到瞓唔到個陣，成日會開下個相簿睇吓，睇吓之前MF影嘅片，睇吓之前影過嘅班相，睇返個份屬於我地嘅回憶，先至可以舒緩到啲壓力。MF 完咗宣報我地係冠軍嘅個一刻，心裏面嘅壓力真係釋放哂出嚟，淚水止都止唔住，因為我真係太想要呢個冠軍，太想太想要我哋一齊囉到呢個冠軍。都想係到特別多謝負責搞MF嘅人，多謝文哲就算屋企俾人fireball，都仍然盡心盡力為我地付出。多謝家朗三年嚟都有搵我跳舞，而且啲舞仲要編得咁靚，咁gay。多謝水魚百忙之中仲繼續lead 住我地，如果唔係成日鬧我地，我地呢啲過動兒又點會肯認真練MF呢。同埋都多謝MF總部嘅每一個人。
+除左係一個感性的人，我其實都係一個幾容易緊張既人。F4 到F6 MF 前一段時間我幾乎每晚都瞓唔著覺，係真係feel到個心臟physically 跳緊咁緊張。我好驚會唱唔好，好驚會唔記得、做錯動作，上兩年好驚螢光棒會揮錯，今年就因為離個吊麥10cm特別驚唱歌走音，甚至連正式上台前最後一次練都係著唔到條裙。我好驚會辜負大家既努力，好驚最後一年MF冇得同大家一齊開開心心咁結束。呢兩年每當我緊張到瞓唔到個陣，成日會開下個相簿睇吓，睇吓之前MF影嘅片，睇吓之前影過嘅班相，睇返個份屬於我地嘅回憶，先至可以舒緩到啲壓力。MF 完咗宣報我地係冠軍嘅個一刻，心裏面嘅壓力真係釋放哂出嚟，淚水止都止唔住，因為我真係太想要呢個冠軍，太想太想要我哋一齊囉到呢個冠軍。都想係到特別多謝負責搞MF嘅人，多謝文哲就算屋企俾人fireball，都仍然盡心盡力為我地付出。多謝家朗三年嚟都有搵我跳舞，而且啲舞仲要編得咁靚，咁gay。多謝水魚百忙之中仲繼續lead 住我地，如果唔係成ย鬧我地，我地呢啲過動兒又點會肯認真練MF呢。同埋都多謝MF總部嘅每一個人。
 
-有件事一直都冇同過其他人講。今年放暑假到一半，我有一段時間日日都失眠，夜晚瞓瞓下覺係咁發夢，啲睡眠質素仲差過文希啲geog成績，搞到我個段時間都有啲精神失常。發嘅夢，真係唔係我為講先作出嚟，差唔多全部都係關於返學，同大家上堂，同大家玩嘢片段。我先至realise 到，原來我有幾咁掛住大家，原來你地已經成為咗我生活中不可缺少既一部分。之後summer mock 返返嚟，雖然每日只係短短嘅幾個鐘，雖然冇同大部分人講過嘢，但係見返你哋一面，我已經好開心，好心滿意足了。
+有件事一直都冇同過其他人講。今年放暑假到一半，我有一段時間日日都失眠，夜晚縮縮下覺係咁發夢，啲睡眠質素仲差過文希啲geog成績，搞到我個段時間都有啲精神失常。發嘅夢，真係唔係我為講先作出嚟，差唔多全部都係關於返學，同大家上堂，同大家玩嘢片段。我先至realise 到，原來我有幾咁掛住大家，原來你地已經成為咗我生活中不可缺少既一部分。之後summer mock 返返嚟，雖然每日只係短短嘅幾個鐘，雖然冇同大部分人講過嘢，但係見返你哋一面，我已經好開心，好心滿意足了。
 
-仲有就係學界決賽嘅時候，踢緊波嗰陣，心裏面除左諗緊要點踢，就係諗緊我地班了，因為我相信我就算跑到幾攰，踢到幾差，只要諗住你地就會即刻recharge 返啲能量，燃起返啲斗志。雖然到最後都係輸咗，但係相比起F3 同樣都係決賽，身邊一個嚟觀賽嘅朋友都冇，見到今次真係有人，有班男仔專登為我過嚟，為我打氣，為我吶喊，我就算輸咗都好開心。所以都想藉此多謝佢哋，每日都同我一齊發癲，每堂都可以有新嘢玩，每次喊嘅時候都肯安慰、照顧我呢個淚點咁低嘅人。想特別多謝幾個人。多謝jair 坐喺我隔離既呢段時間都一直陪我吹水，陪我笑李龍波，教我做數。多謝爸爸借咗我咁久錢，陪我一齊放咗咁多次學。多謝家朗，係我F4 第一個識嘅新朋友，識咗我冇耐就邀請我MF 一齊跳舞，仲玩埋螢光棒，ICT堂又坐咗係我隔離兩年，所以我真係好多謝，好珍惜你同我發生嘅每一點每一滴（崩牙除外）。
+仲有就係學界決賽嘅時候，踢緊波嗰陣，心裏面除左諗緊要點踢，就係諗緊我地班了，因為我相信我就算跑到幾攰，踢到幾差，只要諗住你地就會即刻recharge 返啲能量，燃起返啲斗志。雖然到最後都係輸咗，但係相比起F3 同樣都係決賽，身邊一個嚟觀賽嘅朋友都冇，見到今次真係有人，有班男仔專登為我過嚟，為我打氣，為我吶喊，我就算輸咗都好開心。所以都想藉此多謝佢哋，每日都同我一齊發癲，每堂都可以有新嘢玩，每次喊嘅時候都肯安慰、照顧我呢個淚點咁低嘅人都。想特別多謝幾個人。多謝jair 坐喺我隔離既呢段時間都一直陪我吹水，陪我笑李龍波，教我做數。多謝爸爸借咗我咁久錢，陪我一齊放咗咁多次學。多謝家朗，係我F4 第一個識嘅新朋友，識咗我冇耐就邀請我MF 一齊跳舞，仲玩埋螢光棒，ICT堂又坐咗係我隔離兩年，所以我真係好多謝，好珍惜你同我發生嘅每一點每一滴（崩牙除外）。
 
 除咗多謝你哋之外，我都想同返大家道歉，特別係年初慶功宴個陣，如果我冇戇鳩鳩咁飲醉酒，大家就唔使特別照顧、擔心我，大家就可能可以玩多啲嘢，傾多啲偈了。除咗呢件事之外，如果我呢三年嚟對你做咗任何唔令你唔愉快嘅事，有任何令你唔開心，希望大家可以原諒我，我真係冇心的。
 
 最後，其實我一開始入到嚟呢班，就有一個願望，就係同全班所有人都做到朋友。雖然而家睇返呢個願望大概係冇可能了，但係我仍然好感激你地每一個人能夠同我一班。如果人生係一場戲，我想象唔到如果我唔係呢班嘅一份子，套戲會有幾咁無聊。因為你地，先至為我依一個咁無聊嘅人，咁無聊嘅人生添加不一樣嘅色彩。
 
 I love this class so much.
-            </div>
-        </div>
-    </section>
-
-    <section id="page2">
-        <div class="content-wrapper reveal">
-            <h2 class="text-3xl mb-12 font-light">23-24</h2>
-            <div class="image-list-vertical">
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/1UUoQwye0n_fMoxjEQVUU6UZLpqcA69-E">
-                </div>
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/1FrXjP0y9pGi7KSegQ7xaR_N0A5eyUcij">
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="page3">
-        <div class="content-wrapper reveal">
-            <h2 class="text-3xl mb-12 font-light">24-25</h2>
-            <div class="image-list-vertical">
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/1-VUGMiqwiRtgZ1LPJmY7kX1MJa1UQTTl">
-                </div>
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/19Ac3SvNqHvLt2OfB6CIGdi_Q5eC5Xfx_">
+        <section id="page2">
+            <div class="content-wrapper reveal">
+                <h2 class="text-3xl mb-12 font-light">23-24</h2>
+                <div class="image-list-vertical">
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1UUoQwye0n_fMoxjEQVUU6UZLpqcA69-E">
+                    </div>
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1FrXjP0y9pGi7KSegQ7xaR_N0A5eyUcij">
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="page4">
-        <div class="content-wrapper reveal">
-            <h2 class="text-3xl mb-12 font-light">25-26</h2>
-            <div class="image-list-vertical">
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/1ONt6HD3PsizEbR924yRfVZNx6y2dBQ5r">
-                </div>
-                <div class="image-frame">
-                    <img src="https://lh3.googleusercontent.com/d/13IaXE1KmFGUl3NYBcWrNtzkVq8QZXjBP">
+        <section id="page3">
+            <div class="content-wrapper reveal">
+                <h2 class="text-3xl mb-12 font-light">24-25</h2>
+                <div class="image-list-vertical">
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1-VUGMiqwiRtgZ1LPJmY7kX1MJa1UQTTl">
+                    </div>
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/19Ac3SvNqHvLt2OfB6CIGdi_Q5eC5Xfx_">
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="py-20 text-center text-gray-400 text-xs tracking-widest uppercase">
-        456B &copy; 23-26
-    </footer>
+        <section id="page4">
+            <div class="content-wrapper reveal">
+                <h2 class="text-3xl mb-12 font-light">25-26</h2>
+                <div class="image-list-vertical">
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1ONt6HD3PsizEbR924yRfVZNx6y2dBQ5r">
+                    </div>
+                    <div class="image-frame">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/13IaXE1KmFGUl3NYBcWrNtzkVq8QZXjBP">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-20 text-center text-gray-400 text-xs tracking-widest uppercase">
+            456B &copy; 23-26
+        </footer>
+    </div>
 
     <script>
+        // 啟封邏輯
+        function revealWebsite() {
+            const overlay = document.getElementById('intro-overlay');
+            const main = document.getElementById('main-content');
+            const nav = document.getElementById('pageNav');
+            
+            overlay.classList.add('hidden');
+            main.classList.add('visible');
+            nav.classList.add('visible');
+
+            // 啟動頁面 1 的動畫
+            setTimeout(() => {
+                const firstSection = document.querySelector('#page1 .reveal');
+                if(firstSection) firstSection.classList.add('active');
+            }, 600);
+        }
+
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -294,5 +345,3 @@ I love this class so much.
     </script>
 </body>
 </html>
-
-
