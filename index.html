@@ -25,7 +25,7 @@
             scroll-behavior: smooth;
         }
 
-        /* 啟動頁面/信封樣式 */
+        /* 啟動頁面樣式 */
         #intro-overlay {
             position: fixed;
             top: 0;
@@ -45,17 +45,40 @@
             transform: translateY(-100%);
         }
 
-        .envelope-content {
-            text-align: center;
-            animation: fadeInOut 2.5s ease-in-out infinite;
+        /* 純脈衝圓圈提示 */
+        .click-hint {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.4; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-5px); }
+        .pulse-circle {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #eeeeee;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        /* 初始隱藏主體內容，待點擊後顯示 */
+        .pulse-circle::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid #d1d1d1;
+            position: absolute;
+            animation: pulse 2.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+
+        /* 初始隱藏主體內容 */
         #main-content {
             opacity: 0;
             transition: opacity 1.5s ease;
@@ -73,31 +96,6 @@
             align-items: center;
             padding: 4rem 1rem;
             position: relative;
-        }
-
-        /* 橫向並排橫幅佈局 */
-        .header-banner-row {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 4rem;
-            max-width: 900px;
-        }
-
-        .banner-img-frame {
-            background-color: #f8f9fa;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border-radius: 4px;
-        }
-
-        .banner-img-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
         }
 
         .reveal {
@@ -168,7 +166,6 @@
             .page-nav { right: 0.8rem; }
             .chinese-text { font-size: 1rem; line-height: 2; }
             h2 { font-size: 1.5rem; margin-bottom: 2rem !important; }
-            .header-banner-row { gap: 0.4rem; margin-bottom: 3rem; }
         }
 
         .nav-dot {
@@ -189,12 +186,12 @@
 </head>
 <body class="bg-white">
 
-    <!-- 入口信封頁面 -->
+    <!-- 入口頁面：僅保留純粹的脈衝動畫 -->
     <div id="intro-overlay" onclick="revealWebsite()">
-        <div class="envelope-content">
-            <p class="text-gray-400 tracking-[0.5em] text-sm mb-4">TO.</p>
-            <div class="w-px h-12 bg-gray-200 mx-auto mb-6"></div>
-            <p class="text-xl font-light tracking-widest text-gray-800">click</p>
+        <div class="click-hint">
+            <div class="pulse-circle">
+                <!-- 移除黑點與文字 -->
+            </div>
         </div>
     </div>
 
@@ -208,35 +205,23 @@
 
         <section id="page1">
             <div class="content-wrapper reveal">
-                <div class="header-banner-row">
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/u/0/d/1M8uNrvW1_iay-k4VCX7hheP1MTJSiCEj" alt="Header 1">
-                    </div>
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/u/0/d/1ry8yxwOahuDAAHNQxYeumpZiGXaFpFcS" alt="Header 2">
-                    </div>
-                    <div class="banner-img-frame">
-                        <img src="https://lh3.googleusercontent.com/u/0/d/1sKM4kYgE7HdRObngN0EutZF600M1rcoS" alt="Header 3">
-                    </div>
-                </div>
-
-                <h2 class="text-3xl mb-12 font-light">1</h2>
+                <h2 class="text-3xl mb-12 font-light">!</h2>
                 <div class="chinese-text">
-話說Christmas party 個陣就有好多嘢想講既， 但係由於講都未講已經就嚟喊，所以都係依度先講了，講嘅嘢係有啲肉麻的，唔鍾意的話就唔好睇了。
+話說Christmas party 個陣就有好多嘢想講既， 但係由於講都未講已經就嚟喊，所以都係依度先講了，講嘅嘢係有啲肉麻的，唔鍾意的話就唔好睇落去了。
 
 首先好想多謝你地，好多謝班上面既每一個人，多謝既唔單只係為MF 呢段時間既付出，更加係為左呢三年陪伴。
 
-除左係一個感性的人，我其實都係一個幾容易緊張既人。F4 到F6 MF 前一段時間我幾乎每晚都瞓唔著覺，係真係feel到個心臟physically 跳緊咁緊張。我好驚會唱唔好，好驚會唔記得、做錯動作，上兩年好驚螢光棒會揮錯，今年就因為離個吊麥10cm特別驚唱歌走音，甚至連正式上台前最後一次練都係著唔到條裙。我好驚會辜負大家既努力，好驚最後一年MF冇得同大家一齊開開心心咁結束。呢兩年每當我緊張到瞓唔到個陣，成日會開下個相簿睇吓，睇吓之前MF影嘅片，睇吓之前影過嘅班相，睇返個份屬於我地嘅回憶，先至可以舒緩到啲壓力。MF 完咗宣報我地係冠軍嘅個一刻，心裏面嘅壓力真係釋放哂出嚟，淚水止都止唔住，因為我真係太想要呢個冠軍，太想太想要我哋一齊囉到呢個冠軍。都想係到特別多謝負責搞MF嘅人，多謝文哲就算屋企俾人fireball，都仍然盡心盡力為我地付出。多謝家朗三年嚟都有搵我跳舞，而且啲舞仲要編得咁靚，咁gay。多謝水魚百忙之中仲繼續lead 住我地，如果唔係成ย鬧我地，我地呢啲過動兒又點會肯認真練MF呢。同埋都多謝MF總部嘅每一個人。
+除左係一個感性的人，我其實都係一個幾容易緊張既人。F4 到F6 MF 前一段時間我幾乎每晚都瞓唔著覺，係真係feel到個心臟physically 跳緊咁緊張。我好驚會唱唔好，好驚會唔記得、做錯動作，上兩年好驚螢光棒會揮錯，今年就因為離個吊麥10cm特別驚唱歌走音，MF個日甚至連正式上台前最後一次練都係著唔到條裙。我好驚會辜負大家既努力，好驚最後一年MF冇得同大家一齊開開心心，完美咁完結。呢兩年每次我緊張到瞓唔到個陣，成日會開下個手機睇吓，睇吓之前MF影嘅片，睇吓之前影過嘅班相，睇返個份屬於我地嘅回憶，先至可以舒緩到啲壓力。表演完咗之後，其實我對自己都幾唔滿意，自己有好多位唱得唔好，有好多動作做得唔好，命中注定出來跳一開始就入早左，跳下跳下又有四五個位跳錯，甩beat。講起嚟MF前我仲教人點跳添，到頭嚟我自己都跳唔好..。所以宣報我地係冠軍嘅個一刻，知道自己嘅錯漏冇令到我地冇左個冠軍，心裏面嘅壓力真係釋放哂出嚟，眼淚止都止唔住，因為我真係太想要呢個冠軍，太想太想要我哋一齊囉到呢個冠軍。都想特別多謝負責搞MF嘅人，多謝文哲就算屋企俾人fireball，都仍然盡心盡力為我地付出。多謝家朗三年嚟都有搵我跳舞，而且啲舞仲要編得咁靚，咁gay。多謝水魚百忙之中仲繼續lead 住我地，如果唔係成ย鬧我地，我地呢啲過動兒又點會肯認真練MF呢。同埋都多謝MF總部嘅每一個人。
 
-有件事一直都冇同過其他人講。今年放暑假到一半，我有一段時間日日都失眠，夜晚縮縮下覺係咁發夢，啲睡眠質素仲差過文希啲geog成績，搞到我個段時間都有啲精神失常。發嘅夢，真係唔係我為講先作出嚟，差唔多全部都係關於返學，同大家上堂，同大家玩嘢片段。我先至realise 到，原來我有幾咁掛住大家，原來你地已經成為咗我生活中不可缺少既一部分。之後summer mock 返返嚟，雖然每日只係短短嘅幾個鐘，雖然冇同大部分人講過嘢，但係見返你哋一面，我已經好開心，好心滿意足了。
+有件事一直都冇同過其他人講。今年放暑假到一半，我有一段時間日日都失眠，夜晚瞓瞓下覺係咁發夢，啲睡眠質素仲差過文希啲geog成績，搞到我個段時間都有啲精神失常，甚至連放緊聖誕節嘅呢一刻，我都開始有啲瞓唔著覺。發嘅夢，真係唔係我為講先作出嚟，差唔多全部都係關於返學，同大家上堂，同大家玩嘢片段。我先至發覺到，原來我有幾咁掛住大家，原來你地已經成為咗我生活中咁重要既一部分。之後summer mock 返返嚟，雖然每日只係短短嘅幾個鐘，雖然冇同大部分人講過嘢，但係見返你哋一面，我已經好開心，好心滿意足了。
 
-仲有就係學界決賽嘅時候，踢緊波嗰陣，心裏面除左諗緊要點踢，就係諗緊我地班了，因為我相信我就算跑到幾攰，踢到幾差，只要諗住你地就會即刻recharge 返啲能量，燃起返啲斗志。雖然到最後都係輸咗，但係相比起F3 同樣都係決賽，身邊一個嚟觀賽嘅朋友都冇，見到今次真係有人，有班男仔專登為我過嚟，為我打氣，為我吶喊，我就算輸咗都好開心。所以都想藉此多謝佢哋，每日都同我一齊發癲，每堂都可以有新嘢玩，每次喊嘅時候都肯安慰、照顧我呢個淚點咁低嘅人都。想特別多謝幾個人。多謝jair 坐喺我隔離既呢段時間都一直陪我吹水，陪我笑李龍波，教我做數。多謝爸爸借咗我咁久錢，陪我一齊放咗咁多次學。多謝家朗，係我F4 第一個識嘅新朋友，識咗我冇耐就邀請我MF 一齊跳舞，仲玩埋螢光棒，ICT堂又坐咗係我隔離兩年，所以我真係好多謝，好珍惜你同我發生嘅每一點每一滴（崩牙除外）。
+仲有就係學界決賽嘅時候，踢緊波嗰陣，心裏面除左諗緊要點踢，就係諗緊我地班了，因為我相信我就算跑到幾攰，踢到幾差，只要諗住你地就會即刻recharge 返啲能量，燃起返啲斗志。雖然到最後都係輸咗，但係相比起F3 個陣同樣都係決賽，身邊一個嚟觀賽嘅朋友都冇，見到今次真係有人，有班男仔專登為我過嚟，為我打氣，為我吶喊，我就算輸咗都好開心。所以都想藉此多謝佢哋，每日都同我一齊發癲，每日都可以有新嘢玩，每次喊嘅時候都肯安慰、照顧我呢個淚點咁低嘅人都。想特別多謝幾個人。多謝jair 坐喺我隔離既呢段時間都一直陪我吹水，陪我笑李龍波，教我做數。多謝爸爸借咗我咁久錢，陪我一齊放咗咁多次學。多謝家朗，係我F4 第一個識嘅新朋友，識咗我冇耐就邀請我MF 一齊跳舞，仲玩埋螢光棒，ICT堂又坐咗係我隔離兩年，所以我真係好多謝，好珍惜你地同我一齊嘅每一點每一滴（崩牙除外）。
 
-除咗多謝你哋之外，我都想同返大家道歉，特別係年初慶功宴個陣，如果我冇戇鳩鳩咁飲醉酒，大家就唔使特別照顧、擔心我，大家就可能可以玩多啲嘢，傾多啲偈了。除咗呢件事之外，如果我呢三年嚟對你做咗任何唔令你唔愉快嘅事，有任何令你唔開心，希望大家可以原諒我，我真係冇心的。
+除咗多謝你哋之外，我都想同返大家道歉，特別係年初慶功宴個陣，如果我冇戇鳩鳩咁飲醉酒，大家就唔使特別照顧、擔心我，大家就可能可以玩多啲嘢，傾多啲偈了。除咗呢件事之外，如果我呢三年嚟對你做咗啲令你唔愉快嘅事，有任何令你唔開心，希望大家可以原諒我，我真係冇心的。
 
-最後，其實我一開始入到嚟呢班，就有一個願望，就係同全班所有人都做到朋友。雖然而家睇返呢個願望大概係冇可能了，但係我仍然好感激你地每一個人能夠同我一班。如果人生係一場戲，我想象唔到如果我唔係呢班嘅一份子，套戲會有幾咁無聊。因為你地，先至為我依一個咁無聊嘅人，咁無聊嘅人生添加不一樣嘅色彩。
+最後，其實我一開始入到嚟呢班，就有一個少少既願望，就係同全班所有人都做到朋友。雖然而家睇返呢個願望大概（絕對）係冇可能了，但係我仍然好感激你地每一個人能夠同我一班。如果人生係一場戲，我想象唔到如果我唔係呢班嘅一份子，套戲會有幾咁無聊。因為你地，先至為我依一個咁無聊嘅人，咁無聊嘅人生添加不一樣嘅故事。
 
-I love this class so much.
+I love my class .
                 </div>
             </div>
         </section>
@@ -271,7 +256,7 @@ I love this class so much.
 
         <section id="page4">
             <div class="content-wrapper reveal">
-                <h2 class="text-3xl mb-12 font-light">25-26</h2>
+                <h2 class="text-3xl mb-12 font-light">25-</h2>
                 <div class="image-list-vertical">
                     <div class="image-frame">
                         <img src="https://lh3.googleusercontent.com/u/0/d/1ONt6HD3PsizEbR924yRfVZNx6y2dBQ5r">
